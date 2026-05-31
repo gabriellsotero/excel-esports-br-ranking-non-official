@@ -109,26 +109,14 @@
   .seg button:last-child{border-right:none}
   .seg button.active{background:var(--excel-green);color:#fff}
   .seg button:not(.active):hover{background:var(--excel-green-light)}
-  .count-pill{
-    margin-left:auto;align-self:center;font-size:13px;color:var(--muted);font-weight:600;
-    background:#fff;border:1px solid var(--grid);border-radius:20px;padding:5px 14px;
-  }
-  .count-pill b{color:var(--excel-green)}
-  .col-toggle{
-    background:var(--excel-green-lighter);
-    border:1px solid var(--grid);border-top:none;
-    padding:9px 18px;display:flex;align-items:center;gap:18px;justify-content:flex-end;flex-wrap:wrap;flex:none;
-  }
-  .ct-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
-  .chk{display:flex;align-items:center;gap:7px;font-size:14px;cursor:pointer;color:var(--ink);font-weight:600}
-  .chk input[type=checkbox]{
-    width:16px;height:16px;accent-color:var(--excel-green);cursor:pointer;
-  }
+  .toolbar-total-group{display:flex;align-items:stretch;gap:14px;flex:none}
+  .toolbar-divider{width:1px;background:var(--grid-strong);flex:none}
   .btn-clear{
-    font-family:inherit;font-size:12px;font-weight:600;color:var(--muted);
-    background:#fff;border:1px solid var(--grid-strong);border-radius:4px;padding:7px 12px;cursor:pointer;
+    font-family:inherit;font-size:12px;font-weight:600;color:#b33;
+    background:#fff0f0;border:1px solid #e0a0a0;border-radius:4px;padding:7px 12px;cursor:pointer;
+    transition:.12s;
   }
-  .btn-clear:hover{background:#fff0f0;border-color:#e0a0a0;color:#b33}
+  .btn-clear:hover{background:#b33;border-color:#b33;color:#fff0f0}
 
   /* ---- table ---- */
   .table-scroll{
@@ -185,12 +173,6 @@
   th.sticky-l2,td.sticky-l2{position:sticky;z-index:2}
   th.sticky-l2{z-index:4}
 
-  /* optional columns hidden by default */
-  .opt-total{display:none}
-  .opt-media{display:none}
-  #ranking-table.show-total .opt-total{display:table-cell}
-  #ranking-table.show-media  .opt-media{display:table-cell}
-
   /* detail row (mobile tooltip) */
   .tap-caret{display:none;margin-left:5px;font-size:10px;color:var(--excel-green);vertical-align:middle}
   .detail-row{display:none}
@@ -224,8 +206,15 @@
     .name{white-space:normal;min-width:130px}
     .toolbar .field input{min-width:0;width:100%}
     .toolbar .field{flex:1 1 100%}
+    .toolbar-total-group{flex:1 1 100%}
+    .toolbar .seg{width:100%}
+    .toolbar .seg button{flex:1}
     .detail-content{grid-template-columns:repeat(2,1fr)}
     .detail-rounds{gap:10px}
+  }
+
+  @media (max-width:1120px){
+    .toolbar-divider{display:none}
   }
 
   .foot{font-size:11.5px;color:var(--muted);margin-top:8px;margin-bottom:8px;text-align:center;line-height:1.6;flex:none}

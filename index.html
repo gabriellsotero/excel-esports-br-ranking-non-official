@@ -44,7 +44,6 @@
     </div>
     <div class="field">
       <label>Estado</label>
-
       <select id="estado"><option value="">Todos os estados</option></select>
     </div>
     <div class="field">
@@ -56,13 +55,17 @@
       </div>
     </div>
     <button class="btn-clear" id="clear">Limpar filtros</button>
-    <span class="count-pill"><b id="count">0</b> de 230 participantes</span>
-  </div>
-
-  <div class="col-toggle">
-    <span class="ct-label">Exibir colunas:</span>
-    <label class="chk"><input type="checkbox" id="chkTotal"> Total sem descarte</label>
-    <label class="chk"><input type="checkbox" id="chkMedia"> Média</label>
+    <div class="toolbar-total-group">
+      <div class="toolbar-divider"></div>
+      <div class="field">
+        <label>Coluna total</label>
+        <div class="seg" id="totalSeg">
+          <button data-d="descarte" class="active">Padrão</button>
+          <button data-d="total">Sem Descarte</button>
+          <button data-d="media">Média</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="table-scroll">

@@ -44,12 +44,11 @@ const columns = [
   {key:'r2',     label:'R3',         cls:'center col-mobile-hide',         type:'round', idx:2},
   {key:'r3',     label:'R4',         cls:'center col-mobile-hide',         type:'round', idx:3},
   {key:'r4',     label:'R5',         cls:'center col-mobile-hide',         type:'round', idx:4},
-  {key:'descarte',label:'Total',      cls:'col-metric col-total',                type:'num'},
-  {key:'total',  label:'Sem Descarte',cls:'col-metric opt-total col-mobile-hide',      type:'num'},
-  {key:'media',  label:'Média',       cls:'col-metric opt-media col-mobile-hide',      type:'num'},
+  {key:'descarte',label:'Padrão',     cls:'col-metric col-total',                type:'num'},
 ];
 
 let sortKey='descarte', sortDir=-1;
+let displayCol='descarte'; // 'descarte' | 'total' | 'media'
 let fClass='all', fEstado='', fSearch='';
 
 fetch('data.json').then(r=>r.json()).then(DATA=>{
@@ -71,7 +70,8 @@ columns.forEach(c=>{
         const i=c.idx;
         if(sortKey==='round'+i){sortDir*=-1;}else{sortKey='round'+i;sortDir=-1;}
       }else{
-        if(sortKey===c.key){sortDir*=-1;}else{sortKey=c.key;sortDir=(c.type==='str')?1:-1;}
+        const sk=c.key==='descarte'?displayCol:c.key;
+        if(sortKey===sk){sortDir*=-1;}else{sortKey=sk;sortDir=(c.type==='str')?1:-1;}
       }
       render();
     });
@@ -103,7 +103,8 @@ function render(){
   // header arrows
   document.querySelectorAll('#head th').forEach(th=>{
     const k=th.dataset.key;const arr=th.querySelector('.arrow');
-    let active=(k===sortKey)|| (sortKey.startsWith('round')&&k==='r'+sortKey.slice(5));
+    const ek=k==='descarte'?displayCol:k;
+    let active=(ek===sortKey)||(sortKey.startsWith('round')&&k==='r'+sortKey.slice(5));
     th.classList.toggle('sorted',active);
     if(arr)arr.textContent=active?(sortDir===-1?'▼':'▲'):'';
   });
@@ -112,7 +113,7 @@ function render(){
   body.innerHTML='';
   if(rows.length===0){
     body.innerHTML='<tr><td colspan="'+columns.length+'" class="empty-state">Nenhum participante encontrado com esses filtros.</td></tr>';
-    document.getElementById('count').textContent=0;return;
+    return;
   }
   const frag=document.createDocumentFragment();
   const fmtMedia=v=>v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -132,9 +133,8 @@ function render(){
       const v=d.r[k];
       cells.push(`<td class="col-mobile-hide">${v==null?'<span class="dash">–</span>':v}</td>`);
     }
-    cells.push(`<td class="col-metric strong col-total">${d.descarte}<span class="tap-caret">▾</span></td>`);
-    cells.push(`<td class="col-metric opt-total col-mobile-hide">${d.total}</td>`);
-    cells.push(`<td class="col-metric opt-media col-mobile-hide">${fmtMedia(d.media)}</td>`);
+    const displayVal=displayCol==='media'?fmtMedia(d.media):d[displayCol];
+    cells.push(`<td class="col-metric strong col-total">${displayVal}<span class="tap-caret">▾</span></td>`);
     tr.innerHTML=cells.join('');
     frag.appendChild(tr);
 
@@ -149,10 +149,15 @@ function render(){
     frag.appendChild(dr);
   });
   body.appendChild(frag);
-  document.getElementById('count').textContent=rows.length;
 }
 
 function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+const DISPLAY_LABELS={descarte:'Padrão',total:'Sem Descarte',media:'Média'};
+function updateTotalHeader(){
+  const th=document.querySelector('#head th[data-key="descarte"]');
+  if(th)th.innerHTML=DISPLAY_LABELS[displayCol]+'<span class="arrow"></span>';
+}
 
 document.getElementById('search').addEventListener('input',e=>{fSearch=e.target.value.toLowerCase().trim();render();});
 selEstado.addEventListener('change',e=>{fEstado=e.target.value;render();});
@@ -163,15 +168,22 @@ document.querySelectorAll('#classSeg button').forEach(b=>{
   });
 });
 document.getElementById('clear').addEventListener('click',()=>{
-  fClass='all';fEstado='';fSearch='';
+  fClass='all';fEstado='';fSearch='';displayCol='descarte';
   document.getElementById('search').value='';selEstado.value='';
   document.querySelectorAll('#classSeg button').forEach(x=>x.classList.toggle('active',x.dataset.c==='all'));
-  sortKey='descarte';sortDir=-1;render();
+  document.querySelectorAll('#totalSeg button').forEach(x=>x.classList.toggle('active',x.dataset.d==='descarte'));
+  sortKey='descarte';sortDir=-1;updateTotalHeader();render();
 });
 
-const tbl=document.getElementById('ranking-table');
-document.getElementById('chkTotal').addEventListener('change',e=>{tbl.classList.toggle('show-total',e.target.checked);});
-document.getElementById('chkMedia').addEventListener('change',e=>{tbl.classList.toggle('show-media',e.target.checked);});
+document.querySelectorAll('#totalSeg button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const prev=displayCol;
+    displayCol=b.dataset.d;
+    document.querySelectorAll('#totalSeg button').forEach(x=>x.classList.toggle('active',x===b));
+    if(sortKey===prev)sortKey=displayCol;
+    updateTotalHeader();render();
+  });
+});
 
 // tap the Total cell to reveal hidden details (mobile)
 document.getElementById('body').addEventListener('click',e=>{
