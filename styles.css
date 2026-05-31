@@ -194,7 +194,7 @@
   .detail-round-item{display:flex;flex-direction:column;align-items:center;min-width:32px}
 
   /* ---- responsive: small screens ---- */
-  @media (max-width:860px){
+  @media (max-width:890px){
     html,body{height:auto;overflow:auto}
     .wrap{display:block}
     .table-scroll{flex:none;max-height:none;overflow:auto}
@@ -224,7 +224,7 @@
   }
 
   .foot{font-size:11.5px;color:var(--muted);margin-top:8px;margin-bottom:8px;text-align:center;line-height:1.6;flex:none}
-  @media (max-width:860px){
+  @media (max-width:890px){
     .titlebar h1{font-size:16px}
     .field input{min-width:150px}
   }
