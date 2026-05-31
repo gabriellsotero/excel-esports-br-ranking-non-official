@@ -1,14 +1,49 @@
+const UF_FLAGS = {
+  AC:'02-acre-rounded.png',
+  AL:'03-alagoas-rounded.png',
+  AP:'04-amapa-rounded.png',
+  AM:'05-amazonas-rounded.png',
+  BA:'06-bahia-rounded.png',
+  CE:'07-ceara-rounded.png',
+  DF:'08-distrito-federal-rounded.png',
+  ES:'09-espirito-santo-rounded.png',
+  GO:'10-goias-rounded.png',
+  MA:'11-maranhao-rounded.png',
+  MT:'12-mato-grosso-rounded.png',
+  MS:'13-mato-grosso-do-sul-rounded.png',
+  MG:'14-minas-gerais-rounded.png',
+  PA:'15-para-rounded.png',
+  PB:'16-paraiba-rounded.png',
+  PR:'17-parana-rounded.png',
+  PE:'18-pernambuco-rounded.png',
+  PI:'19-piaui-rounded.png',
+  RJ:'20-rio-de-janeiro-rounded.png',
+  RN:'21-rio-grande-do-norte-rounded.png',
+  RS:'22-rio-grande-do-sul-rounded.png',
+  RO:'23-rondonia-rounded.png',
+  RR:'24-roraima-rounded.png',
+  SC:'25-santa-catarina-rounded.png',
+  SP:'26-sao-paulo-rounded.png',
+  SE:'27-sergipe-rounded.png',
+  TO:'28-tocantins-rounded.png',
+};
+const UF_FLAG_BASE='https://cdn.jsdelivr.net/gh/pierrelapalu/icones-bandeiras-br-uf@master/dist/rounded/png-200/';
+function ufFlagImg(uf){
+  const f=UF_FLAGS[uf];
+  return f?`<img class="uf-flag" src="${UF_FLAG_BASE}${f}" alt="${uf}">`:'';
+}
+
 const columns = [
   {key:'pos',    label:'#',          cls:'center sticky-l', sortable:false},
   {key:'class',  label:'★',          cls:'center',          type:'bool'},
   {key:'nome',   label:'Nome',       cls:'left',            type:'str'},
   {key:'estado', label:'UF',         cls:'center col-mobile-hide',          type:'str'},
   {key:'part',   label:'Part.',      cls:'center col-mobile-hide',          type:'num'},
-  {key:'r0',     label:'R1',         cls:'col-mobile-hide',                type:'round', idx:0},
-  {key:'r1',     label:'R2',         cls:'col-mobile-hide',                type:'round', idx:1},
-  {key:'r2',     label:'R3',         cls:'col-mobile-hide',                type:'round', idx:2},
-  {key:'r3',     label:'R4',         cls:'col-mobile-hide',                type:'round', idx:3},
-  {key:'r4',     label:'R5',         cls:'col-mobile-hide',                type:'round', idx:4},
+  {key:'r0',     label:'R1',         cls:'center col-mobile-hide',         type:'round', idx:0},
+  {key:'r1',     label:'R2',         cls:'center col-mobile-hide',         type:'round', idx:1},
+  {key:'r2',     label:'R3',         cls:'center col-mobile-hide',         type:'round', idx:2},
+  {key:'r3',     label:'R4',         cls:'center col-mobile-hide',         type:'round', idx:3},
+  {key:'r4',     label:'R5',         cls:'center col-mobile-hide',         type:'round', idx:4},
   {key:'descarte',label:'Total',      cls:'col-metric col-total',                type:'num'},
   {key:'total',  label:'Sem Descarte',cls:'col-metric opt-total col-mobile-hide',      type:'num'},
   {key:'media',  label:'Média',       cls:'col-metric opt-media col-mobile-hide',      type:'num'},
@@ -90,7 +125,7 @@ function render(){
       `<td class="center sticky-l"><span class="${posCls}">${pos}</span></td>`,
       `<td class="center">${d.class?'<span class="star">★</span>':''}</td>`,
       `<td class="left name">${escapeHtml(d.nome)}</td>`,
-      `<td class="center col-mobile-hide"><span class="uf">${d.estado}</span></td>`,
+      `<td class="center col-mobile-hide"><span class="uf">${ufFlagImg(d.estado)}${d.estado}</span></td>`,
       `<td class="center col-mobile-hide">${d.part}</td>`,
     ];
     for(let k=0;k<5;k++){
@@ -107,7 +142,7 @@ function render(){
     const dr=document.createElement('tr');
     dr.className='detail-row';
     const det=[];
-    det.push(`<span><b>UF</b> ${d.estado}</span>`);
+    det.push(`<span><b>UF</b> ${ufFlagImg(d.estado)}${d.estado}</span>`);
     det.push(`<span><b>Participações</b> ${d.part}</span>`);
     for(let k=0;k<5;k++){const v=d.r[k];det.push(`<span><b>R${k+1}</b> ${v==null?'–':v}</span>`);}
     det.push(`<span><b>Sem descarte</b> ${d.total}</span>`);
