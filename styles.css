@@ -141,7 +141,7 @@
     position:sticky;top:0;z-index:3;
     background:linear-gradient(180deg,var(--header-band),var(--excel-green));
     color:#fff;font-weight:700;text-align:right;font-size:14px;
-    padding:10px 11px;border-right:1px solid rgba(255,255,255,.18);
+    padding:10px 20px 10px 11px;border-right:1px solid rgba(255,255,255,.18);
     border-bottom:2px solid var(--excel-green-dark);
     cursor:pointer;user-select:none;
   }
@@ -170,6 +170,7 @@
   .pos.top1{color:#b8860b}.pos.top2{color:#7d7d7d}.pos.top3{color:#a06a2c}
   .star{color:var(--gold);font-size:15px}
   .dash{color:#c2c2c2}
+  thead th.col-total{text-align:center;padding-left:20px;padding-right:20px}
   tbody td.col-metric{background:var(--excel-green-lighter)}
   tbody tr.row-alt td.col-metric{background:#eef6f0}
   .strong{font-weight:700;color:var(--excel-green-dark)}
@@ -213,7 +214,7 @@
     .col-total{cursor:pointer}
     .col-total .tap-caret{display:inline-block}
     .col-total.expanded .tap-caret{transform:rotate(180deg)}
-    thead th{font-size:13px;padding:9px 8px}
+    thead th{font-size:13px;padding:9px 17px 9px 8px}
     tbody td{padding:9px 8px}
     table{font-size:14px}
     .name{white-space:normal;min-width:130px}
