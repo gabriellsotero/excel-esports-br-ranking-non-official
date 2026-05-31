@@ -37,7 +37,7 @@ const columns = [
   {key:'pos',    label:'#',          cls:'center sticky-l', sortable:false},
   {key:'class',  label:'★',          cls:'center',          type:'bool'},
   {key:'nome',   label:'Nome',       cls:'left',            type:'str'},
-  {key:'estado', label:'UF',         cls:'center col-mobile-hide',          type:'str'},
+  {key:'estado', label:'UF',         cls:'center',                          type:'str'},
   {key:'part',   label:'Part.',      cls:'center col-mobile-hide',          type:'num'},
   {key:'r0',     label:'R1',         cls:'center col-mobile-hide',         type:'round', idx:0},
   {key:'r1',     label:'R2',         cls:'center col-mobile-hide',         type:'round', idx:1},
@@ -125,7 +125,7 @@ function render(){
       `<td class="center sticky-l"><span class="${posCls}">${pos}</span></td>`,
       `<td class="center">${d.class?'<span class="star">★</span>':''}</td>`,
       `<td class="left name">${escapeHtml(d.nome)}</td>`,
-      `<td class="center col-mobile-hide"><span class="uf">${ufFlagImg(d.estado)}${d.estado}</span></td>`,
+      `<td class="center"><span class="uf">${ufFlagImg(d.estado)}${d.estado}</span></td>`,
       `<td class="center col-mobile-hide">${d.part}</td>`,
     ];
     for(let k=0;k<5;k++){
@@ -142,11 +142,9 @@ function render(){
     const dr=document.createElement('tr');
     dr.className='detail-row';
     const det=[];
-    det.push(`<span><b>UF</b> ${ufFlagImg(d.estado)}${d.estado}</span>`);
-    det.push(`<span><b>Participações</b> ${d.part}</span>`);
-    for(let k=0;k<5;k++){const v=d.r[k];det.push(`<span><b>R${k+1}</b> ${v==null?'–':v}</span>`);}
-    det.push(`<span><b>Sem descarte</b> ${d.total}</span>`);
-    det.push(`<span><b>Média</b> ${fmtMedia(d.media)}</span>`);
+    det.push(`<span class="detail-inline"><b>Participações</b> ${d.part}</span>`);
+    const rds=[];for(let k=0;k<5;k++){const v=d.r[k];rds.push(`<span class="detail-round-item"><b>R${k+1}</b>${v==null?'–':v}</span>`);}
+    det.push(`<span class="detail-rounds">${rds.join('')}</span>`);
     dr.innerHTML=`<td colspan="99"><div class="detail-content">${det.join('')}</div></td>`;
     frag.appendChild(dr);
   });
