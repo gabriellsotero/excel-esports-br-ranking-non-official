@@ -67,7 +67,7 @@
   .intro-h{
     font-size:15px;font-weight:700;color:var(--excel-green-dark);
     text-transform:uppercase;letter-spacing:.6px;
-    padding-bottom:6px;border-bottom:2px solid var(--excel-green-light);
+    padding-bottom:6px;border-bottom:2px solid #b3d4bf;
     cursor:pointer;list-style:none;user-select:none;
   }
   .intro-h::-webkit-details-marker{display:none}
@@ -76,8 +76,12 @@
     letter-spacing:.5px;opacity:.55;margin-top:1px;
   }
   details[open] > .intro-h::after{content:'OCULTAR'}
-  .intro-h.disclaimer{color:#b3641a;border-bottom-color:#f4c99a}
+  .intro-h.disclaimer{color:#b3641a;border-bottom-color:#e0a870}
   .intro p{font-size:14.5px;line-height:1.62;color:var(--ink);margin-top:6px}
+  .intro a{color:var(--excel-green-dark);text-decoration:underline;text-decoration-color:#7bbf9c;text-underline-offset:2px;font-weight:600}
+  .intro a:hover{color:var(--excel-green);text-decoration-color:var(--excel-green)}
+  .intro-h.disclaimer ~ p a{color:#9a4c0e;text-decoration-color:#e09a6a}
+  .intro-h.disclaimer ~ p a:hover{color:#b3641a;text-decoration-color:#b3641a}
   .intro b{color:var(--excel-green-dark)}
   .intro-h.disclaimer + p b,.disclaimer ~ p b{color:#b3641a}
   .email{
