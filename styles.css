@@ -11,6 +11,7 @@
     --ink:#1c2b22;
     --muted:#5e6b63;
     --gold:#f4b400;
+    --discard:#fbe3e3;
     --paper:#ffffff;
     --bg:#eef2ee;
   }
@@ -165,6 +166,7 @@
   thead th.col-total{text-align:center;padding-left:20px;padding-right:20px}
   tbody td.col-metric{background:var(--excel-green-lighter)}
   tbody tr.row-alt td.col-metric{background:#eef6f0}
+  tbody tr td.discarded,tbody tr.row-alt td.discarded{background:var(--discard)}
   .strong{font-weight:700;color:var(--excel-green-dark)}
   .empty-state{padding:50px;text-align:center;color:var(--muted);font-size:15px}
 

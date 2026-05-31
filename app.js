@@ -50,6 +50,13 @@ const columns = [
 let sortKey='descarte', sortDir=-1;
 let displayCol='descarte'; // 'descarte' | 'total' | 'media'
 let fClass='all', fEstado='', fSearch='';
+const DISCARD_COUNT=1; // dropped rounds in "Padrão"; becomes 2 after round 7
+
+// indices of the rounds dropped under the discard rule (blank counts as 0)
+function discardedIdx(r){
+  const sorted=r.map((v,i)=>[v==null?0:v,i]).sort((a,b)=>a[0]-b[0]);
+  return new Set(sorted.slice(0,DISCARD_COUNT).map(p=>p[1]));
+}
 
 fetch('data.json').then(r=>r.json()).then(DATA=>{
 // build state dropdown
@@ -129,9 +136,11 @@ function render(){
       `<td class="center"><span class="uf">${ufFlagImg(d.estado)}${d.estado}</span></td>`,
       `<td class="center col-mobile-hide">${d.part}</td>`,
     ];
+    const discards=displayCol==='descarte'?discardedIdx(d.r):null;
     for(let k=0;k<5;k++){
       const v=d.r[k];
-      cells.push(`<td class="col-mobile-hide">${v==null?'<span class="dash">–</span>':v}</td>`);
+      const dc=discards&&discards.has(k)?' discarded':'';
+      cells.push(`<td class="col-mobile-hide${dc}">${v==null?'<span class="dash">–</span>':v}</td>`);
     }
     const displayVal=displayCol==='media'?fmtMedia(d.media):d[displayCol];
     cells.push(`<td class="col-metric strong col-total">${displayVal}<span class="tap-caret">▾</span></td>`);
