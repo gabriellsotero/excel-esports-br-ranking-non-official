@@ -1,0 +1,9 @@
+# Editor-generated CSS sourcemaps (we hand-write CSS)
+*.css.map
+
+# Node (only used locally for tooling/verification)
+node_modules/
+package-lock.json
+
+# Raw input data — local only for now (see CLAUDE.md)
+results.csv
