@@ -33,24 +33,26 @@ function ufFlagImg(uf){
   return f?`<img class="uf-flag" src="${UF_FLAG_BASE}${f}" alt="${uf}">`:'';
 }
 
-const columns = [
+// Columns before/after the per-round columns. The round columns themselves
+// are generated dynamically from the data (see fetch below), so adding a new
+// round needs no code change — just new rows in rankings.csv.
+const columnsHead = [
   {key:'pos',    label:'#',          cls:'center sticky-l', sortable:false},
   {key:'class',  label:'★',          cls:'center',          type:'bool'},
   {key:'nome',   label:'Nome',       cls:'left',            type:'str'},
   {key:'estado', label:'UF',         cls:'center',                          type:'str'},
   {key:'part',   label:'Part.',      cls:'center col-mobile-hide',          type:'num'},
-  {key:'r0',     label:'R1',         cls:'center col-mobile-hide',         type:'round', idx:0},
-  {key:'r1',     label:'R2',         cls:'center col-mobile-hide',         type:'round', idx:1},
-  {key:'r2',     label:'R3',         cls:'center col-mobile-hide',         type:'round', idx:2},
-  {key:'r3',     label:'R4',         cls:'center col-mobile-hide',         type:'round', idx:3},
-  {key:'r4',     label:'R5',         cls:'center col-mobile-hide',         type:'round', idx:4},
+];
+const columnsTail = [
   {key:'descarte',label:'Padrão',     cls:'col-metric col-total',                type:'num'},
 ];
+let columns = [...columnsHead, ...columnsTail];
+let ROUND_COUNT = 0; // set from data on load
 
 let sortKey='descarte', sortDir=-1;
 let displayCol='descarte'; // 'descarte' | 'total' | 'media'
 let fClass='all', fEstado='', fSearch='';
-const DISCARD_COUNT=1; // dropped rounds in "Padrão"; becomes 2 after round 7
+const DISCARD_COUNT=2; // dropped rounds in "Padrão" (1 for rounds 1-6, 2 from round 7)
 
 // indices of the rounds dropped under the discard rule (blank counts as 0)
 function discardedIdx(r){
@@ -59,6 +61,14 @@ function discardedIdx(r){
 }
 
 fetch('data.json').then(r=>r.json()).then(DATA=>{
+// derive round count from the data and build the round columns dynamically
+ROUND_COUNT = DATA.length ? DATA[0].r.length : 0;
+const roundCols=[];
+for(let i=0;i<ROUND_COUNT;i++){
+  roundCols.push({key:'r'+i,label:'R'+(i+1),cls:'center col-mobile-hide',type:'round',idx:i});
+}
+columns=[...columnsHead,...roundCols,...columnsTail];
+
 // build state dropdown
 const estados=[...new Set(DATA.map(d=>d.estado))].sort();
 const selEstado=document.getElementById('estado');
@@ -137,7 +147,7 @@ function render(){
       `<td class="center col-mobile-hide">${d.part}</td>`,
     ];
     const discards=displayCol==='descarte'?discardedIdx(d.r):null;
-    for(let k=0;k<5;k++){
+    for(let k=0;k<ROUND_COUNT;k++){
       const v=d.r[k];
       const dc=discards&&discards.has(k)?' discarded':'';
       cells.push(`<td class="col-mobile-hide${dc}">${v==null?'<span class="dash">–</span>':v}</td>`);
@@ -152,7 +162,7 @@ function render(){
     dr.className='detail-row';
     const det=[];
     det.push(`<span class="detail-inline"><b>Participações</b> ${d.part}</span>`);
-    const rds=[];for(let k=0;k<5;k++){const v=d.r[k];rds.push(`<span class="detail-round-item"><b>R${k+1}</b>${v==null?'–':v}</span>`);}
+    const rds=[];for(let k=0;k<ROUND_COUNT;k++){const v=d.r[k];rds.push(`<span class="detail-round-item"><b>R${k+1}</b>${v==null?'–':v}</span>`);}
     det.push(`<span class="detail-rounds">${rds.join('')}</span>`);
     dr.innerHTML=`<td colspan="99"><div class="detail-content">${det.join('')}</div></td>`;
     frag.appendChild(dr);
