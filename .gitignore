@@ -5,5 +5,8 @@
 node_modules/
 package-lock.json
 
-# Raw input data — local only for now (see CLAUDE.md)
-results.csv
+# Python
+__pycache__/
+
+# Source CSVs (rankings.csv, class.csv) are committed so the
+# "Build data.json" GitHub Action can regenerate data.json on push.

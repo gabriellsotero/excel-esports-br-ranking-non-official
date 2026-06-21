@@ -1,0 +1,40 @@
+name: Build data.json
+
+# Regenerate data.json whenever the source CSVs change on main.
+on:
+  push:
+    branches: [main]
+    paths:
+      - rankings.csv
+      - class.csv
+      - process.py
+      - .github/workflows/build-data.yml
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Generate data.json
+        run: python process.py
+
+      - name: Commit data.json if changed
+        run: |
+          if git diff --quiet -- data.json; then
+            echo "data.json unchanged; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "chore(data): regenerate data.json from CSVs"
+          git push
