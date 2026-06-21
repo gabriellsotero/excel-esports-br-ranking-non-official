@@ -24,8 +24,8 @@ The site is **not affiliated** with the official championship, FMWC, or any of i
 
 ## Scoring methodology
 
-- Participants are ranked by total points accumulated across rounds, with **1 discard** (the lowest score is dropped). This will become **2 discards** after round 7.
-- Points per round: 1st place = 1,000 pts, 2nd = 999 pts, 3rd = 998 pts, and so on.
+- Participants are ranked by total points accumulated across rounds, with **2 discards** (the lowest scores are dropped). Controlled by `NUM_DISCARDS` in `process.py`.
+- Points per round: 1st place = 1,000 pts, 2nd = 999 pts, 3rd = 998 pts, and so on — derived from placement as `pontos = 1001 - Pos.`.
 - A blank round counts as 0 and **can be the discarded score**.
 - Participants with 0 points still receive ranking points (unlike the global MEWC ranking).
 - Disqualified participants receive no points.
@@ -35,7 +35,7 @@ The site is **not affiliated** with the official championship, FMWC, or any of i
 | Field | Description |
 |---|---|
 | `part` | Number of rounds with any score (non-blank) |
-| `descarte` | Sum of the 4 best round scores (1 discard; blanks = 0) |
+| `descarte` | Sum of the best `(rounds − NUM_DISCARDS)` round scores (blanks = 0, dropped first) |
 | `total` | Sum of all round scores (no discard) |
 | `media` | Average of non-blank rounds only |
 
@@ -43,28 +43,39 @@ The primary sort column is `descarte` (descending).
 
 ---
 
-## Data pipeline (current — manual)
+## Data pipeline (automated)
 
-1. Export results to `results.csv` (encoding: ISO-8859-1 / Windows-1252)
-2. Run Python processing script to compute metrics and produce UTF-8 JSON
-3. Write the JSON to `data.json` (loaded by `app.js` via `fetch`)
-4. Commit and push → auto-deploy
+1. Update the source CSVs (`rankings.csv`, `class.csv`) and push to `main`
+2. The **Build data.json** GitHub Action (`.github/workflows/build-data.yml`) runs `process.py`
+3. `process.py` pivots the rankings, computes metrics, and writes UTF-8 `data.json`
+4. The action commits `data.json` if it changed → GitHub Pages auto-deploys
+
+`process.py` can also be run locally: `python process.py [rankings.csv] [class.csv] [data.json]`.
+Both CSVs are committed to the repo (the action needs them). Encoding is auto-detected
+per file (UTF-8 or ISO-8859-1) — the two exports have historically differed.
 
 ### CSV structure
 
+**`rankings.csv`** — long format, one row per participant per round:
+
 ```
-#, Class?, Nome, Estado, Rodada 1, Rodada 2, Rodada 3, Rodada 4, Rodada 5
+Rodada, Pos., Nome, UF
 ```
 
-- `Class?` column: `?` means the participant is already qualified (★); blank means not qualified
-- `Estado`: Brazilian state abbreviation (UF)
-- Round columns: integer scores or blank (absent)
+- `Rodada`: round label like `Rodada 1` (round count is detected dynamically)
+- `Pos.`: placement in that round; points are derived as `pontos = 1001 - Pos.`
+- `Nome`: participant name (the pivot key, also matched against `class.csv`)
+- `UF`: Brazilian state abbreviation
+- A round a participant didn't play simply has no row (becomes `null` in `r[]`)
+
+**`class.csv`** — qualified participants (★), **one name per line, no header.**
+A participant is marked `class: true` when their name appears here.
 
 ---
 
 ## Planned evolution
 
-- **Short term:** automate the CSV → JSON pipeline via a GitHub Action — on every push of a new `results.csv`, the action runs the Python processing script and updates `index.html` automatically
+- **Done:** the CSV → JSON pipeline is automated via the **Build data.json** GitHub Action (runs `process.py` on push of the source CSVs and commits `data.json`)
 - **Medium term:** new features on the site itself, including but not limited to:
   - Ranking by state (UF)
   - Round history with filters and parameters
@@ -100,7 +111,10 @@ The primary sort column is `descarte` (descending).
 | `index.html` | Page markup; links `styles.css` and `app.js` |
 | `styles.css` | All styles |
 | `app.js` | All logic; fetches data from `data.json` |
-| `data.json` | Participant data consumed by `app.js` |
+| `data.json` | Participant data consumed by `app.js` (generated — do not edit by hand) |
+| `process.py` | Builds `data.json` from the source CSVs |
+| `rankings.csv` | Source data: placements per round (long format), committed |
+| `class.csv` | Source data: qualified participants (★), one name per line, committed |
+| `.github/workflows/build-data.yml` | GitHub Action that regenerates `data.json` on push |
 | `README.md` | Project overview and documentation |
 | `CLAUDE.md` | This file — Claude Code session briefing |
-| `results.csv` | Raw input data — **local only for now**, not committed to the repo. Will be part of the GitHub Action workflow once the short-term automation is implemented |
