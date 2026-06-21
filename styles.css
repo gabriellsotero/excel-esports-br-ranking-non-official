@@ -123,6 +123,16 @@
   }
   .btn-clear:hover{background:#b33;border-color:#b33;color:#fff0f0}
 
+  .field-export{flex:none}
+  .export-row{display:flex;gap:6px;align-items:stretch}
+  .field-export input{min-width:0;width:64px;text-align:center}
+  .btn-export{
+    font-family:inherit;font-size:12px;font-weight:600;color:#fff;white-space:nowrap;
+    background:var(--excel-green);border:1px solid var(--excel-green);border-radius:4px;
+    padding:7px 12px;cursor:pointer;transition:.12s;
+  }
+  .btn-export:hover{background:var(--excel-green-dark);border-color:var(--excel-green-dark)}
+
   /* ---- table ---- */
   .table-scroll{
     border:1px solid var(--grid-strong);border-top:none;border-radius:0 0 8px 8px;
