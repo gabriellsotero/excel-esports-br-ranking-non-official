@@ -128,7 +128,7 @@ def build(rankings_path, class_path):
         for n in sorted(unmatched):
             print(f"  - {n}", file=sys.stderr)
 
-    return participants
+    return participants, num_rounds
 
 
 def main():
@@ -136,11 +136,19 @@ def main():
     class_path = sys.argv[2] if len(sys.argv) > 2 else "class.csv"
     out_path = sys.argv[3] if len(sys.argv) > 3 else "data.json"
 
-    participants = build(rankings_path, class_path)
+    participants, num_rounds = build(rankings_path, class_path)
+    # process.py is the single source of truth for the scoring config;
+    # app.js reads `discards`/`rounds` from here instead of duplicating them.
+    output = {
+        "discards": NUM_DISCARDS,
+        "rounds": num_rounds,
+        "participants": participants,
+    }
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(participants, f, ensure_ascii=False)
+        json.dump(output, f, ensure_ascii=False)
 
-    print(f"Wrote {out_path}: {len(participants)} participants")
+    print(f"Wrote {out_path}: {len(participants)} participants, "
+          f"{num_rounds} rounds, {NUM_DISCARDS} discards")
 
 
 if __name__ == "__main__":

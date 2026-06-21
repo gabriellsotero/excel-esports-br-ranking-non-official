@@ -47,12 +47,12 @@ const columnsTail = [
   {key:'descarte',label:'Padrão',     cls:'col-metric col-total',                type:'num'},
 ];
 let columns = [...columnsHead, ...columnsTail];
-let ROUND_COUNT = 0; // set from data on load
+let ROUND_COUNT = 0;   // set from data on load
+let DISCARD_COUNT = 0; // set from data on load (single source: process.py)
 
 let sortKey='descarte', sortDir=-1;
 let displayCol='descarte'; // 'descarte' | 'total' | 'media'
 let fClass='all', fEstado='', fSearch='';
-const DISCARD_COUNT=3; // dropped rounds in "Padrão" — keep in sync with NUM_DISCARDS in process.py
 
 // indices of the rounds dropped under the discard rule (blank counts as 0)
 function discardedIdx(r){
@@ -60,9 +60,11 @@ function discardedIdx(r){
   return new Set(sorted.slice(0,DISCARD_COUNT).map(p=>p[1]));
 }
 
-fetch('data.json').then(r=>r.json()).then(DATA=>{
-// derive round count from the data and build the round columns dynamically
-ROUND_COUNT = DATA.length ? DATA[0].r.length : 0;
+fetch('data.json').then(r=>r.json()).then(payload=>{
+const DATA=payload.participants;
+// scoring config comes from data.json (written by process.py) — single source
+ROUND_COUNT = payload.rounds ?? (DATA.length ? DATA[0].r.length : 0);
+DISCARD_COUNT = payload.discards ?? 0;
 const roundCols=[];
 for(let i=0;i<ROUND_COUNT;i++){
   roundCols.push({key:'r'+i,label:'R'+(i+1),cls:'center col-mobile-hide',type:'round',idx:i});

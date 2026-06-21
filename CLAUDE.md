@@ -24,7 +24,7 @@ The site is **not affiliated** with the official championship, FMWC, or any of i
 
 ## Scoring methodology
 
-- Participants are ranked by total points accumulated across rounds, with **3 discards** (the lowest scores are dropped). Controlled by `NUM_DISCARDS` in `process.py` (and keep `DISCARD_COUNT` in `app.js` in sync).
+- Participants are ranked by total points accumulated across rounds, with **3 discards** (the lowest scores are dropped). Single source of truth: `NUM_DISCARDS` in `process.py`, emitted into `data.json` as `discards` and read by `app.js`.
 - Points per round: 1st place = 1,000 pts, 2nd = 999 pts, 3rd = 998 pts, and so on — derived from placement as `pontos = 1001 - Pos.`.
 - A blank round counts as 0 and **can be the discarded score**.
 - Participants with 0 points still receive ranking points (unlike the global MEWC ranking).
@@ -40,6 +40,10 @@ The site is **not affiliated** with the official championship, FMWC, or any of i
 | `media` | Average of non-blank rounds only |
 
 The primary sort column is `descarte` (descending).
+
+`data.json` is an object: `{ "discards": N, "rounds": N, "participants": [ … ] }`.
+The `participants` array holds the per-participant objects above; `discards` and
+`rounds` are scoring config emitted by `process.py` and consumed by `app.js`.
 
 ---
 
