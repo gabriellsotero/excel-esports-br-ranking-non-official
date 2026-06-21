@@ -29,8 +29,7 @@ import re
 import sys
 
 # Number of lowest rounds discarded when computing `descarte`.
-# Bumped to 2 (was 1 for rounds 1-6).
-NUM_DISCARDS = 2
+NUM_DISCARDS = 3
 
 
 def read_text(path):

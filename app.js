@@ -52,7 +52,7 @@ let ROUND_COUNT = 0; // set from data on load
 let sortKey='descarte', sortDir=-1;
 let displayCol='descarte'; // 'descarte' | 'total' | 'media'
 let fClass='all', fEstado='', fSearch='';
-const DISCARD_COUNT=2; // dropped rounds in "Padrão" (1 for rounds 1-6, 2 from round 7)
+const DISCARD_COUNT=3; // dropped rounds in "Padrão" — keep in sync with NUM_DISCARDS in process.py
 
 // indices of the rounds dropped under the discard rule (blank counts as 0)
 function discardedIdx(r){
