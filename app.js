@@ -55,10 +55,13 @@ let displayCol='descarte'; // 'descarte' | 'total' | 'media'
 let fClass='all', fEstado='', fSearch='';
 let currentRows=[]; // last filtered+sorted rows (source for image export)
 
-// indices of the rounds dropped under the discard rule (blank counts as 0)
-function discardedIdx(r){
+function discardedIdx(r, n){
   const sorted=r.map((v,i)=>[v==null?0:v,i]).sort((a,b)=>a[0]-b[0]);
-  return new Set(sorted.slice(0,DISCARD_COUNT).map(p=>p[1]));
+  return new Set(sorted.slice(0,n).map(p=>p[1]));
+}
+function computeDescarte(r, n){
+  const dropped=discardedIdx(r,n);
+  return r.reduce((s,v,i)=>dropped.has(i)?s:s+(v==null?0:v),0);
 }
 
 fetch('data.json').then(r=>r.json()).then(payload=>{
@@ -102,6 +105,7 @@ columns.forEach(c=>{
 function getSortVal(d){
   if(sortKey.startsWith('round')){const i=+sortKey.slice(5);return d.r[i]??-1;}
   if(sortKey==='class')return d.class?1:0;
+  if(sortKey==='descarte2')return computeDescarte(d.r,2);
   return d[sortKey];
 }
 
@@ -150,13 +154,13 @@ function render(){
       `<td class="center"><span class="uf">${ufFlagImg(d.estado)}${d.estado}</span></td>`,
       `<td class="center col-mobile-hide">${d.part}</td>`,
     ];
-    const discards=displayCol==='descarte'?discardedIdx(d.r):null;
+    const discards=(displayCol==='descarte'||displayCol==='descarte2')?discardedIdx(d.r,displayCol==='descarte2'?2:DISCARD_COUNT):null;
     for(let k=0;k<ROUND_COUNT;k++){
       const v=d.r[k];
       const dc=discards&&discards.has(k)?' discarded':'';
       cells.push(`<td class="col-mobile-hide${dc}">${v==null?'<span class="dash">–</span>':v}</td>`);
     }
-    const displayVal=displayCol==='media'?fmtMedia(d.media):d[displayCol];
+    const displayVal=displayCol==='media'?fmtMedia(d.media):displayCol==='descarte2'?computeDescarte(d.r,2):d[displayCol];
     cells.push(`<td class="col-metric strong col-total">${displayVal}<span class="tap-caret">▾</span></td>`);
     tr.innerHTML=cells.join('');
     frag.appendChild(tr);
@@ -176,7 +180,7 @@ function render(){
 
 function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
-const DISPLAY_LABELS={descarte:'Padrão',total:'Sem Descarte',media:'Média'};
+const DISPLAY_LABELS={descarte:'Padrão',descarte2:'2 Descartes',total:'Sem Descarte',media:'Média'};
 function updateTotalHeader(){
   const th=document.querySelector('#head th[data-key="descarte"]');
   if(th)th.innerHTML=DISPLAY_LABELS[displayCol]+'<span class="arrow"></span>';
@@ -223,9 +227,9 @@ document.getElementById('body').addEventListener('click',e=>{
 const MEDAL=['#b8860b','#7d7d7d','#a06a2c']; // top1/top2/top3, matches the table
 function pointsLabel(){return displayCol==='media'?'Média':displayCol==='total'?'Total':'Pontos';}
 function pointsValue(d){
-  return displayCol==='media'
-    ? d.media.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})
-    : String(d[displayCol]);
+  if(displayCol==='media')return d.media.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(displayCol==='descarte2')return String(computeDescarte(d.r,2));
+  return String(d[displayCol]);
 }
 function ellipsize(ctx,text,maxW){
   if(ctx.measureText(text).width<=maxW)return text;
