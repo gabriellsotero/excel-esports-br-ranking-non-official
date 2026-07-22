@@ -38,39 +38,43 @@
   </div>
 
   <div class="toolbar">
-    <div class="field">
-      <label>Buscar participante</label>
-      <input id="search" type="text" placeholder="Nome do participante…" autocomplete="off">
-    </div>
-    <div class="field">
-      <label>Estado</label>
-      <select id="estado"><option value="">Todos os estados</option></select>
-    </div>
-    <div class="field">
-      <label>Classificação</label>
-      <div class="seg" id="classSeg">
-        <button data-c="all" class="active">Todos</button>
-        <button data-c="yes">★ Classificados</button>
-        <button data-c="no">Não classificados</button>
-      </div>
-    </div>
-    <button class="btn-clear" id="clear">Limpar filtros</button>
-    <div class="field field-export">
-      <label>Exportar imagem</label>
-      <div class="export-row">
-        <input id="exportN" type="number" min="1" value="10" inputmode="numeric" aria-label="Quantos do topo exportar">
-        <button class="btn-export" id="exportBtn">Exportar PNG</button>
-      </div>
-    </div>
-    <div class="toolbar-total-group">
-      <div class="toolbar-divider"></div>
+    <div class="toolbar-row">
       <div class="field">
-        <label>Coluna total</label>
-        <div class="seg" id="totalSeg">
-          <button data-d="descarte" class="active">Padrão</button>
-          <button data-d="descarte2">2 Descartes</button>
-          <button data-d="total">Sem Descarte</button>
-          <button data-d="media">Média</button>
+        <label>Buscar participante</label>
+        <input id="search" type="text" placeholder="Nome do participante…" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Estado</label>
+        <select id="estado"><option value="">Todos os estados</option></select>
+      </div>
+      <div class="field field-export">
+        <label>Exportar imagem</label>
+        <div class="export-row">
+          <input id="exportN" type="number" min="1" value="10" inputmode="numeric" aria-label="Quantos do topo exportar">
+          <button class="btn-export" id="exportBtn">Exportar PNG</button>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar-row">
+      <div class="field">
+        <label>Classificação</label>
+        <div class="seg" id="classSeg">
+          <button data-c="all" class="active">Todos</button>
+          <button data-c="yes">★ Classificados</button>
+          <button data-c="no">Não classificados</button>
+        </div>
+      </div>
+      <button class="btn-clear" id="clear">Limpar filtros</button>
+      <div class="toolbar-total-group">
+        <div class="toolbar-divider"></div>
+        <div class="field">
+          <label>Coluna total</label>
+          <div class="seg" id="totalSeg">
+            <button data-d="descarte" class="active">Padrão</button>
+            <button data-d="descarte2">2 Descartes</button>
+            <button data-d="total">Sem Descarte</button>
+            <button data-d="media">Média</button>
+          </div>
         </div>
       </div>
     </div>
