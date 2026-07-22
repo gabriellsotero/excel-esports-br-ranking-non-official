@@ -114,7 +114,7 @@
   .seg button:last-child{border-right:none}
   .seg button.active{background:var(--excel-green);color:#fff}
   .seg button:not(.active):hover{background:var(--excel-green-light)}
-  .toolbar-total-group{display:flex;align-items:stretch;gap:14px;flex:none}
+  .toolbar-total-group{display:flex;align-items:stretch;gap:14px;flex:none;margin-left:auto}
   .toolbar-divider{width:1px;background:var(--grid-strong);flex:none}
   .btn-clear{
     font-family:inherit;font-size:12px;font-weight:600;color:#b33;
