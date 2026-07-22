@@ -17,7 +17,7 @@
     <div class="xlogo">X</div>
     <div>
       <h1>Excel eSports Brasil 2026</h1>
-      <div class="sub">após 6 rodadas · atualizado em 20/06/2026</div>
+      <div class="sub">após 7 rodadas · atualizado em 21/07/2026</div>
     </div>
     <span class="badge-unofficial">Não-oficial</span>
   </div>
@@ -33,49 +33,45 @@
     <details class="intro-block" open>
       <summary class="intro-h">📊 Método de cálculo</summary>
       <p>Os participantes são classificados com base no número total de pontos acumulados durante a temporada, com 3 descartes. Os pontos são calculados usando a classificação das melhores rodadas de cada participante (descartando as 3 piores) do campeonato Excel Esports Brasil by BTG Pactual. O vencedor de cada batalha recebe 1.000 pontos de classificação; o 2º lugar recebe 999 pts, o 3º lugar recebe 998 pts, e assim por diante. Diferentemente do ranking mundial, os participantes que marcaram 0 pontos também recebem pontos de classificação. Participantes desclassificados não recebem pontos de classificação.</p>
-      <p>A coluna Total pode ser alternada entre três modos: <strong>Padrão</strong> (total com descarte — valor principal do ranking), <strong>Sem Descarte</strong> (soma de todas as rodadas) e <strong>Média</strong> (média das rodadas com presença). Pessoalmente, prefiro o modo Padrão, porque todos têm direito a pular uma rodada (embora nem sempre pelos motivos mais justos) ou tentar uma técnica diferente de resolução sem ser penalizado. Já a média, na minha visão, pode privilegiar quem participou menos e, com poucas rodadas ao longo do ano, isso faz diferença.</p>
+      <p>A coluna Total pode ser alternada entre quatro modos: <strong>Padrão</strong> (total com 3 descartes — valor principal do ranking), <strong>2 Descartes</strong> (total descartando apenas as 2 piores rodadas), <strong>Sem Descarte</strong> (soma de todas as rodadas) e <strong>Média</strong> (média das rodadas com presença). Pessoalmente, prefiro o modo Padrão, porque todos têm direito a pular uma rodada (embora nem sempre pelos motivos mais justos) ou tentar uma técnica diferente de resolução sem ser penalizado. Já a média, na minha visão, pode privilegiar quem participou menos e, com poucas rodadas ao longo do ano, isso faz diferença.</p>
     </details>
   </div>
 
   <div class="toolbar">
-    <div class="toolbar-row">
-      <div class="field">
-        <label>Buscar participante</label>
-        <input id="search" type="text" placeholder="Nome do participante…" autocomplete="off">
-      </div>
-      <div class="field">
-        <label>Estado</label>
-        <select id="estado"><option value="">Todos os estados</option></select>
-      </div>
-      <div class="field field-export">
-        <label>Exportar imagem</label>
-        <div class="export-row">
-          <input id="exportN" type="number" min="1" value="10" inputmode="numeric" aria-label="Quantos do topo exportar">
-          <button class="btn-export" id="exportBtn">Exportar PNG</button>
-        </div>
+    <div class="field">
+      <label>Buscar participante</label>
+      <input id="search" type="text" placeholder="Nome do participante…" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Estado</label>
+      <select id="estado"><option value="">Todos os estados</option></select>
+    </div>
+    <div class="field">
+      <label>Classificação</label>
+      <select id="classSeg">
+        <option value="all">Todos</option>
+        <option value="yes">★ Classificados</option>
+        <option value="no">Não classificados</option>
+      </select>
+    </div>
+    <button class="btn-clear" id="clear">Limpar filtros</button>
+    <div class="field field-export">
+      <label>Exportar imagem</label>
+      <div class="export-row">
+        <input id="exportN" type="number" min="1" value="10" inputmode="numeric" aria-label="Quantos do topo exportar">
+        <button class="btn-export" id="exportBtn">Exportar PNG</button>
       </div>
     </div>
-    <div class="toolbar-row">
+    <div class="toolbar-total-group">
+      <div class="toolbar-divider"></div>
       <div class="field">
-        <label>Classificação</label>
-        <div class="seg" id="classSeg">
-          <button data-c="all" class="active">Todos</button>
-          <button data-c="yes">★ Classificados</button>
-          <button data-c="no">Não classificados</button>
-        </div>
-      </div>
-      <button class="btn-clear" id="clear">Limpar filtros</button>
-      <div class="toolbar-total-group">
-        <div class="toolbar-divider"></div>
-        <div class="field">
-          <label>Coluna total</label>
-          <div class="seg" id="totalSeg">
-            <button data-d="descarte" class="active">Padrão</button>
-            <button data-d="descarte2">2 Descartes</button>
-            <button data-d="total">Sem Descarte</button>
-            <button data-d="media">Média</button>
-          </div>
-        </div>
+        <label>Coluna total</label>
+        <select id="totalSeg">
+          <option value="descarte">Padrão</option>
+          <option value="descarte2">2 Descartes</option>
+          <option value="total">Sem Descarte</option>
+          <option value="media">Média</option>
+        </select>
       </div>
     </div>
   </div>

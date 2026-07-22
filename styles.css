@@ -95,9 +95,8 @@
   .toolbar{
     background:var(--excel-green-lighter);
     border:1px solid var(--grid);border-top:none;
-    padding:12px 16px;display:flex;flex-direction:column;gap:10px;flex:none;
+    padding:12px 16px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;flex:none;
   }
-  .toolbar-row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;}
   .field{display:flex;flex-direction:column;gap:4px}
   .field label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
   .field input,.field select{
@@ -107,16 +106,7 @@
   }
   .field input:focus,.field select:focus{border-color:var(--excel-green);box-shadow:0 0 0 2px rgba(33,115,70,.18)}
   .field input{min-width:220px}
-  .seg{display:flex;border:1px solid var(--grid-strong);border-radius:4px;overflow:hidden}
-  .seg button{
-    font-family:inherit;font-size:13px;font-weight:600;border:none;background:#fff;color:var(--muted);
-    padding:6px 13px;cursor:pointer;border-right:1px solid var(--grid);transition:.12s;
-  }
-  .seg button:last-child{border-right:none}
-  .seg button.active{background:var(--excel-green);color:#fff}
-  .seg button:not(.active):hover{background:var(--excel-green-light)}
-  .toolbar-total-group{display:flex;align-items:stretch;gap:14px;flex:none;margin-left:auto}
-  .field-export{margin-left:auto}
+  .toolbar-total-group{display:flex;align-items:stretch;gap:14px;flex:none}
   .toolbar-divider{width:1px;background:var(--grid-strong);flex:none}
   .btn-clear{
     font-family:inherit;font-size:12px;font-weight:600;color:#b33;
@@ -222,13 +212,10 @@
     tbody td{padding:9px 8px}
     table{font-size:14px}
     .name{white-space:normal;min-width:130px}
-    .toolbar-row{flex-direction:column}
-    .toolbar-row .field input{min-width:0;width:100%}
-    .toolbar-row .field{flex:1 1 100%}
-    .field-export{margin-left:0}
-    .toolbar-total-group{flex:1 1 100%;margin-left:0}
-    .toolbar .seg{width:100%}
-    .toolbar .seg button{flex:1}
+    .toolbar .field input,.toolbar .field select{min-width:0;width:100%}
+    .toolbar .field{flex:1 1 100%}
+    .toolbar-total-group{flex:1 1 100%}
+    .toolbar-total-group .field{flex:1 1 100%}
     .detail-content{grid-template-columns:repeat(2,1fr)}
     .detail-rounds{gap:10px}
   }

@@ -188,28 +188,20 @@ function updateTotalHeader(){
 
 document.getElementById('search').addEventListener('input',e=>{fSearch=e.target.value.toLowerCase().trim();render();});
 selEstado.addEventListener('change',e=>{fEstado=e.target.value;render();});
-document.querySelectorAll('#classSeg button').forEach(b=>{
-  b.addEventListener('click',()=>{
-    document.querySelectorAll('#classSeg button').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');fClass=b.dataset.c;render();
-  });
-});
+document.getElementById('classSeg').addEventListener('change',e=>{fClass=e.target.value;render();});
 document.getElementById('clear').addEventListener('click',()=>{
   fClass='all';fEstado='';fSearch='';displayCol='descarte';
   document.getElementById('search').value='';selEstado.value='';
-  document.querySelectorAll('#classSeg button').forEach(x=>x.classList.toggle('active',x.dataset.c==='all'));
-  document.querySelectorAll('#totalSeg button').forEach(x=>x.classList.toggle('active',x.dataset.d==='descarte'));
+  document.getElementById('classSeg').value='all';
+  document.getElementById('totalSeg').value='descarte';
   sortKey='descarte';sortDir=-1;updateTotalHeader();render();
 });
 
-document.querySelectorAll('#totalSeg button').forEach(b=>{
-  b.addEventListener('click',()=>{
-    const prev=displayCol;
-    displayCol=b.dataset.d;
-    document.querySelectorAll('#totalSeg button').forEach(x=>x.classList.toggle('active',x===b));
-    if(sortKey===prev)sortKey=displayCol;
-    updateTotalHeader();render();
-  });
+document.getElementById('totalSeg').addEventListener('change',e=>{
+  const prev=displayCol;
+  displayCol=e.target.value;
+  if(sortKey===prev)sortKey=displayCol;
+  updateTotalHeader();render();
 });
 
 // tap the Total cell to reveal hidden details (mobile)
